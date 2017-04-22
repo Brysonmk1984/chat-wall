@@ -2,7 +2,7 @@
   "name": "tournament-chat",
   "version": "1.0.0",
   "engines": {
-    "node": "7.6.4"
+    "node": "7.x"
   },
   "description": "Chat component for the tournament app",
   "main": "index.js",
