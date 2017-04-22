@@ -7,7 +7,8 @@
   "description": "Chat component for the tournament app",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start" : "node index.js"
   },
   "author": "Bryson Kruk",
   "license": "MIT",
