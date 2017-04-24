@@ -22,16 +22,16 @@ app.use(express.static("./public"));
 
 app.use(cors());
 
-app.get('/', function (req, res) {
+app.get('/chat-wall-api', function (req, res) {
     res.status(200).json({ 'messages': messages });
 });
 
-app.post('/', function(req, res){
+app.post('/chat-wall-api', function(req, res){
     messages.push(req.body)
     res.json({ 'messages': messages });
 });
 
-app.delete('/:id', function(req, res){
+app.delete('/chat-wall-api/:id', function(req, res){
     let match = messages.find((message)=>{
         return message.id === parseInt(req.params.id);
     });
@@ -40,8 +40,8 @@ app.delete('/:id', function(req, res){
     res.json({ 'messages': messages });
 });
 
-app.listen(3000, function () {
-    console.log('Listening on port 3000!');
+app.listen( process.env.PORT || 3000, function () {
+    console.log('Listening on port ' + process.env.PORT || 3000 );
 });
 
 module.exports = app;
