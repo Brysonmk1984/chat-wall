@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
 app.use(express.static("./public"));
 app.use(cors());
 
-if(productionMode){
+/*if(productionMode){
     pg.connect(dbUrl, function(err, client, done) {
         done();
         if (err){
@@ -40,7 +40,7 @@ if(productionMode){
             console.log('results',result.rows);
         });
     });
-}
+}*/
 
 
 
@@ -62,6 +62,7 @@ app.get('/db', function (req, res) {
 
 // GET MESSAGES
 app.get('/chat-wall-api', function (req, res) {
+    console.log('RESPONSE',res);
     res.status(200).json({ 'messages': messages });
 });
 
