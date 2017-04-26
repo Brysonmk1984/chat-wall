@@ -8,7 +8,7 @@ const pg = require('pg');
 pg.defaults.ssl = true;
 
 
-const productionMode = false;
+const productionMode = true;
 const dbUrl = productionMode ? process.env.DATABASE_URL : "postgres:///localchatwall";
 
 let messages = [
