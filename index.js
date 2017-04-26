@@ -28,17 +28,17 @@ app.use(cors());
 
 if(productionMode){
     pg.connect(dbUrl, function(err, client, done) {
-    done();
-    if (err){
-        console.log('ERRORR - ', err);
-        throw err;
-     }
-    
-    
-    console.log('Connected to postgres! Getting schemas...');
-    client.query('SELECT * FROM test_table'), function(err, result) {
-        console.log('results',result.rows);
+        done();
+        if (err){
+            console.log('ERRORR - ', err);
+            throw err;
         }
+        
+        
+        console.log('Connected to postgres! Getting schemas...');
+        client.query('SELECT * FROM test_table', function(err, result) {
+            console.log('results',result.rows);
+        });
     });
 }
 
