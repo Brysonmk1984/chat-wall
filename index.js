@@ -8,7 +8,7 @@ const pg = require('pg');
 pg.defaults.ssl = true;
 
 
-const productionMode = false;
+const productionMode = true;
 const dbUrl = productionMode ? process.env.DATABASE_URL : "postgres:///localchatwall";
 
 let messages = [
@@ -64,12 +64,21 @@ app.delete('/chat-wall-api/:id', function(req, res){
 
 
 // HTTPS SERVER
-var privateKey = fs.readFileSync(__dirname + '/server.key', 'utf8');
-var certificate = fs.readFileSync(__dirname + '/server.crt', 'utf8');
-var credential = { key: privateKey, cert: certificate };
+if(productionMode){
+    // Production https server
+    https.createServer(app).listen( process.env.PORT, function(){
+        console.log('Https App started on ', process.env.PORT);
+    });
+}else{
+    // Dev https server
+    var privateKey = fs.readFileSync(__dirname + '/server.key', 'utf8');
+    var certificate = fs.readFileSync(__dirname + '/server.crt', 'utf8');
+    var credential = { key: privateKey, cert: certificate };
 
-https.createServer(credential, app).listen( process.env.PORT || 3000, function(){
-    console.log('Https App started on ', process.env.PORT || 3000);
-});
+    https.createServer(credential, app).listen(3000, function(){
+        console.log('Https App started on ', 3000);
+    });
+}
+
 
 module.exports = app;
