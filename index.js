@@ -26,6 +26,19 @@ app.use(function(req, res, next) {
 app.use(express.static("./public"));
 app.use(cors());
 
+if(productionMode){
+    pg.connect(dbUrl, function(err, client, done) {
+    if (err) throw err;
+        console.log('Connected to postgres! Getting schemas...');
+        client.query('SELECT * FROM test_table'), function(err, result) {
+            console.log('results',result.rows);
+         }
+    });
+}
+
+
+
+
 // TEST GET @ /DB
 app.get('/db', function (req, res) {
   pg.connect(dbUrl, function(err, client, done) {
