@@ -11,11 +11,11 @@ pg.defaults.ssl = true;
 const productionMode = true;
 const dbUrl = productionMode ? process.env.DATABASE_URL : "postgres:///localchatwall";
 
-let messages = [
+/*let messages = [
     { 'name' : 'Bryson', 'id' : 0, 'message' : 'You Suck!' },
     { 'name' : 'Ryan', 'id' : 1, 'message' : 'No You Suck!' },
     { 'name' : 'Matt', 'id' : 2, 'message' : 'Both of you suck' }
-];
+];*/
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,24 +30,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Something broke!')
 })
 
-/*if(productionMode){
-    pg.connect(dbUrl, function(err, client, done) {
-        done();
-        if (err){
-            console.log('ERRORR - ', err);
-            throw err;
-        }
-        
-        
-        console.log('Connected to postgres! Getting schemas...');
-        client.query('SELECT * FROM test_table', function(err, result) {
-            console.log('results',result.rows);
-        });
-    });
-}*/
-
-
-
 
 // TEST GET @ /DB
 app.get('/db', function (req, res) {
@@ -60,20 +42,42 @@ app.get('/db', function (req, res) {
               res.status(200).json({ 'messages': result.rows });
         }
     });
-    console.log(err)
   });
 });
 
 // GET MESSAGES
 app.get('/chat-wall-api', function (req, res) {
-    console.log('RESPONSE',res);
-    res.status(200).json({ 'messages': messages });
+    pg.connect(dbUrl, function(err, client, done) {
+        client.query('SELECT * FROM test_table', function(err, result) {
+        done();
+            if (err) { console.error(err); res.send("DB CB Error " + err); 
+            }else{ 
+                console.log('results row',result.rows);
+                res.status(200).json({ 'messages': result.rows });
+            }
+        });
+    });
 });
 
 // POST MESSAGE
 app.post('/chat-wall-api', function(req, res){
-    messages.push(req.body)
-    res.json({ 'messages': messages });
+    pg.connect(dbUrl, function(err, client, done) {
+        if(err){
+            console.log('problem connecting to db');
+             res.json({ 'pushSuccess' : false });
+            throw err;
+        }
+        client.query(`INSERT INTO test_table(name, message) VALUES ('${req.query.name}', '${req.query.message}')`, function(err, result) {
+        done();
+        if(err){
+             res.json({ 'pushSuccess' : false });
+            throw err;
+        }
+        console.log('pushed');
+         res.json({ 'pushSuccess' : true });
+        });
+    });
+   
 });
 
 // DELETE MESSAGE
@@ -100,13 +104,17 @@ if(productionMode){
     });
 }else{
     // Dev https server
-    var privateKey = fs.readFileSync(__dirname + '/server.key', 'utf8');
+   var privateKey = fs.readFileSync(__dirname + '/server.key', 'utf8');
     var certificate = fs.readFileSync(__dirname + '/server.crt', 'utf8');
     var credential = { key: privateKey, cert: certificate };
 
     https.createServer(credential, app).listen(3000, function(){
         console.log('Https App started on ', 3000);
     });
+
+    /*app.listen( 3000, function () {
+        console.log('Listening on port ' + 3000);
+    });*/
 }
 
 
