@@ -8,7 +8,7 @@ const pg = require('pg');
 pg.defaults.ssl = true;
 
 
-const productionMode = true;
+const productionMode = false;
 const dbUrl = productionMode ? process.env.DATABASE_URL : "postgres:///localchatwall";
 
 let messages = [
@@ -25,6 +25,10 @@ app.use(function(req, res, next) {
 });
 app.use(express.static("./public"));
 app.use(cors());
+app.use(function (err, req, res, next) {
+  console.error('err stack'.err.stack)
+  res.status(500).send('Something broke!')
+})
 
 /*if(productionMode){
     pg.connect(dbUrl, function(err, client, done) {
@@ -83,11 +87,16 @@ app.delete('/chat-wall-api/:id', function(req, res){
 });
 
 
-// HTTPS SERVER
+// SERVER TYPE
 if(productionMode){
     // Production https server
-    https.createServer(app).listen( process.env.PORT, function(){
+    /*https.createServer(app).listen( process.env.PORT, function(){
         console.log('Https App started on ', process.env.PORT);
+    });*/
+
+    // Production http server
+    app.listen( process.env.PORT, function () {
+        console.log('Listening on port ' + process.env.PORT);
     });
 }else{
     // Dev https server
