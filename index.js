@@ -28,6 +28,7 @@ app.use(cors());
 
 if(productionMode){
     pg.connect(dbUrl, function(err, client, done) {
+    done();
     if (err){
         console.log('ERRORR - ', err);
         throw err;
