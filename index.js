@@ -1,22 +1,15 @@
+const fs = require("fs");
+const https = require('https');
 const express = require('express');
+const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const pg = require('pg');
+pg.defaults.ssl = true;
 
-const app = express();
 
-app.get('/db', function (request, response) {
-  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('SELECT * FROM test_table', function(err, result) {
-      done();
-      if (err)
-       { console.error(err); response.send("Error " + err); }
-      else
-       { response.render('pages/db', {results: result.rows} ); }
-    });
-  });
-});
-
+const productionMode = false;
+const dbUrl = productionMode ? process.env.DATABASE_URL : "postgres:///localchatwall";
 
 let messages = [
     { 'name' : 'Bryson', 'id' : 0, 'message' : 'You Suck!' },
@@ -26,25 +19,40 @@ let messages = [
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(function(req, res, next) {
 	console.log(`${req.method} request for '${req.url}' - ${JSON.stringify(req.body)}`);
 	next();
 });
-
 app.use(express.static("./public"));
-
 app.use(cors());
 
+// TEST GET @ /DB
+app.get('/db', function (req, res) {
+  pg.connect(dbUrl, function(err, client, done) {
+    client.query('SELECT * FROM test_table', function(err, result) {
+      done();
+        if (err) { console.error(err); res.send("DB CB Error " + err); 
+         }else{ 
+             console.log('results row',result.rows);
+              res.status(200).json({ 'messages': result.rows });
+        }
+    });
+    console.log(err)
+  });
+});
+
+// GET MESSAGES
 app.get('/chat-wall-api', function (req, res) {
     res.status(200).json({ 'messages': messages });
 });
 
+// POST MESSAGE
 app.post('/chat-wall-api', function(req, res){
     messages.push(req.body)
     res.json({ 'messages': messages });
 });
 
+// DELETE MESSAGE
 app.delete('/chat-wall-api/:id', function(req, res){
     let match = messages.find((message)=>{
         return message.id === parseInt(req.params.id);
@@ -54,8 +62,14 @@ app.delete('/chat-wall-api/:id', function(req, res){
     res.json({ 'messages': messages });
 });
 
-app.listen( process.env.PORT || 3000, function () {
-    console.log('Listening on port ' + process.env.PORT || 3000 );
+
+// HTTPS SERVER
+var privateKey = fs.readFileSync(__dirname + '/server.key', 'utf8');
+var certificate = fs.readFileSync(__dirname + '/server.crt', 'utf8');
+var credential = { key: privateKey, cert: certificate };
+
+https.createServer(credential, app).listen( process.env.PORT || 3000, function(){
+    console.log('Https App started on ', process.env.PORT || 3000);
 });
 
 module.exports = app;

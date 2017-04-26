@@ -1,0 +1,66 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            88:ea:11:b7:1e:13:c6:45
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=US, ST=Colorado, L=Denver, O=Internet Widgits Pty Ltd, CN=localhost/emailAddress=brysonmk1984@gmail.com
+        Validity
+            Not Before: Apr 26 18:43:21 2017 GMT
+            Not After : May 26 18:43:21 2017 GMT
+        Subject: C=US, ST=Colorado, L=Denver, O=Internet Widgits Pty Ltd, CN=localhost/emailAddress=brysonmk1984@gmail.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:b1:e1:da:05:8d:4c:1c:f4:58:f2:d3:0d:86:09:
+                    a1:5e:21:59:ac:0c:7d:0e:83:c8:63:de:f5:9e:93:
+                    8b:42:55:84:ad:43:9b:13:eb:d4:a0:54:70:67:31:
+                    e7:95:9d:09:e2:52:14:27:3e:59:9f:95:10:c7:82:
+                    23:ad:3d:e2:06:de:ce:fe:84:3e:a4:cf:d0:54:05:
+                    a0:99:8d:91:ed:a1:22:2b:8b:d7:6a:ef:a7:b8:62:
+                    63:2c:b6:f1:a2:7f:5b:f9:f3:3e:f2:e7:fe:60:33:
+                    57:81:0a:73:8f:01:c3:1b:0e:ec:a1:f4:0f:ef:7c:
+                    d6:1d:7c:b6:5a:be:a6:d6:4d
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                F3:3F:76:2B:30:10:4D:09:39:AB:49:39:EA:8C:25:BD:26:17:86:56
+            X509v3 Authority Key Identifier: 
+                keyid:F3:3F:76:2B:30:10:4D:09:39:AB:49:39:EA:8C:25:BD:26:17:86:56
+                DirName:/C=US/ST=Colorado/L=Denver/O=Internet Widgits Pty Ltd/CN=localhost/emailAddress=brysonmk1984@gmail.com
+                serial:88:EA:11:B7:1E:13:C6:45
+
+            X509v3 Basic Constraints: 
+                CA:TRUE
+    Signature Algorithm: sha1WithRSAEncryption
+        29:38:6e:1b:2e:61:1f:95:f7:b9:8b:a7:cd:4f:7a:8b:43:6f:
+        20:b3:c8:33:7e:d7:89:3f:91:07:c0:da:c7:8e:02:b4:46:52:
+        35:0a:d1:18:c2:fd:27:61:72:e9:ed:b4:a8:62:34:4e:6f:59:
+        b9:c2:77:d1:06:2c:22:a2:8f:f8:15:ef:e1:5e:3a:ff:d1:0f:
+        aa:37:78:e4:8b:da:f2:37:7f:9d:9a:37:44:65:e9:96:e9:00:
+        f0:b1:11:72:73:dc:48:b9:2e:79:f3:37:75:db:b1:e6:e0:06:
+        fc:6d:e2:77:6d:9d:d2:a7:84:78:a0:c1:db:9e:60:f9:99:a4:
+        d9:75
+-----BEGIN CERTIFICATE-----
+MIIDljCCAv+gAwIBAgIJAIjqEbceE8ZFMA0GCSqGSIb3DQEBBQUAMIGPMQswCQYD
+VQQGEwJVUzERMA8GA1UECBMIQ29sb3JhZG8xDzANBgNVBAcTBkRlbnZlcjEhMB8G
+A1UEChMYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMRIwEAYDVQQDEwlsb2NhbGhv
+c3QxJTAjBgkqhkiG9w0BCQEWFmJyeXNvbm1rMTk4NEBnbWFpbC5jb20wHhcNMTcw
+NDI2MTg0MzIxWhcNMTcwNTI2MTg0MzIxWjCBjzELMAkGA1UEBhMCVVMxETAPBgNV
+BAgTCENvbG9yYWRvMQ8wDQYDVQQHEwZEZW52ZXIxITAfBgNVBAoTGEludGVybmV0
+IFdpZGdpdHMgUHR5IEx0ZDESMBAGA1UEAxMJbG9jYWxob3N0MSUwIwYJKoZIhvcN
+AQkBFhZicnlzb25tazE5ODRAZ21haWwuY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GN
+ADCBiQKBgQCx4doFjUwc9Fjy0w2GCaFeIVmsDH0Og8hj3vWek4tCVYStQ5sT69Sg
+VHBnMeeVnQniUhQnPlmflRDHgiOtPeIG3s7+hD6kz9BUBaCZjZHtoSIri9dq76e4
+YmMstvGif1v58z7y5/5gM1eBCnOPAcMbDuyh9A/vfNYdfLZavqbWTQIDAQABo4H3
+MIH0MB0GA1UdDgQWBBTzP3YrMBBNCTmrSTnqjCW9JheGVjCBxAYDVR0jBIG8MIG5
+gBTzP3YrMBBNCTmrSTnqjCW9JheGVqGBlaSBkjCBjzELMAkGA1UEBhMCVVMxETAP
+BgNVBAgTCENvbG9yYWRvMQ8wDQYDVQQHEwZEZW52ZXIxITAfBgNVBAoTGEludGVy
+bmV0IFdpZGdpdHMgUHR5IEx0ZDESMBAGA1UEAxMJbG9jYWxob3N0MSUwIwYJKoZI
+hvcNAQkBFhZicnlzb25tazE5ODRAZ21haWwuY29tggkAiOoRtx4TxkUwDAYDVR0T
+BAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQApOG4bLmEflfe5i6fNT3qLQ28gs8gz
+fteJP5EHwNrHjgK0RlI1CtEYwv0nYXLp7bSoYjROb1m5wnfRBiwioo/4Fe/hXjr/
+0Q+qN3jki9ryN3+dmjdEZemW6QDwsRFyc9xIuS558zd127Hm4Ab8beJ3bZ3Sp4R4
+oMHbnmD5maTZdQ==
+-----END CERTIFICATE-----
