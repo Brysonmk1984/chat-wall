@@ -1,5 +1,5 @@
-const fs = require("fs");
-const https = require('https');
+//const fs = require("fs");
+//const https = require('https');
 const express = require('express');
 const app = express();
 const cors = require("cors");
@@ -8,7 +8,7 @@ const pg = require('pg');
 pg.defaults.ssl = true;
 
 
-const productionMode = true;
+const productionMode = false;
 const dbUrl = productionMode ? process.env.DATABASE_URL : "postgres:///localchatwall";
 
 app.use(bodyParser.json());
@@ -20,74 +20,58 @@ app.use(function(req, res, next) {
 app.use(express.static("./public"));
 app.use(cors());
 
-// GET MESSAGES
+// GET MESSAGES FROM DB
+const getMessages = function(client, res, done){
+    client.query('SELECT * FROM messages', function(err, result) {
+        done();
+        if (err) {errorHandler(err, res, done, "get");
+        }else{ 
+            console.log('results row',result.rows);
+            res.status(200).json({ 'messages': result.rows });
+        }
+    });
+};
+
+// HANDLE ALL ERRORS
+const errorHandler = function(err, res, done, type, message){
+    done();
+    res.json({ requestType : type, success : false, error : err, message });
+};
+
+// ROUTE - GET MESSAGES
 app.get('/chat-wall-api', function (req, res) {
     pg.connect(dbUrl, function(err, client, done) {
-        if (err) { 
-            console.error(err)
-            res.send("DB CONNECTION Error " + err); 
+        if (err) { errorHandler(err, res, done, "get"); 
+        }else{
+            getMessages(client,res,done);
         }
-        client.query('SELECT * FROM messages', function(err, result) {
-            done();
-            if (err) { console.error(err); res.send("DB CB Error " + err); 
-            }else{ 
-                console.log('results row',result.rows);
-                res.status(200).json({ 'messages': result.rows });
-            }
-        });
     });
 });
 
-// POST MESSAGE
+// ROUTE - POST MESSAGE
 app.post('/chat-wall-api', function(req, res){
     pg.connect(dbUrl, function(err, client, done) {
-        if(err){
-            console.log('problem connecting to db');
-             res.json({ 'pushSuccess' : false });
-            throw err;
-        }
-        if(req.query.name && req.query.message){
-            client.query(`INSERT INTO messages(name, message) VALUES ('${req.query.name}', '${req.query.message}')`, function(err, result) {
-                done();
-                if(err){
-                    res.json({ 'postSuccess' : false });
-                    throw err;
+        if (err) { errorHandler(err, res, done, "post"); }
+        if(req.query.name && req.query.message && req.query.pid){
+            client.query(`INSERT INTO messages(name, message, pid) VALUES ('${req.query.name}', '${req.query.message}', ${req.query.pid})`, function(err, result) {
+                if(err){ errorHandler(err, res, done, "post");
+                }else{
+                    getMessages(client,res,done);
                 }
-                client.query('SELECT * FROM messages', function(err, result) {
-                    done();
-                    if (err) { res.json({ 'postSuccess' : false }); throw err;
-                    }else{ 
-                        console.log('results row',result.rows);
-                        res.status(200).json({ 'messages': result.rows, 'postSuccess' : true });
-                    }
-                });
             });
-        } else {
-            throw new Error('Name and Message must be provided');
-        }
+        }else{errorHandler(err, res, done, "get", "Name, Message, and PID required");}
     });
    
 });
 
-// DELETE MESSAGE
+// ROUTE - DELETE MESSAGE
 app.delete('/chat-wall-api/:id', function(req, res){
     pg.connect(dbUrl, function(err, client, done) {
-        if (err) { 
-            res.json({ 'deleteSuccess' : false });
-            throw err; 
-        }
+        if (err) { errorHandler(err, res, done, "delete"); }
         client.query(`DELETE FROM messages WHERE '${req.params.id}' = messages.id `, function(err, result) {
-            done();
-            if (err) { res.json({ 'deleteSuccess' : false }); throw err; 
+            if (err) { errorHandler(err, res, done, "delete");
             }else{ 
-                client.query('SELECT * FROM messages', function(err, result) {
-                    done();
-                    if (err) { console.error(err); res.send("DB CB Error " + err); 
-                    }else{ 
-                        console.log('results row',result.rows);
-                        res.status(200).json({ 'messages': result.rows, 'deleteSuccess' : true });
-                    }
-                });
+                getMessages(client,res,done);
             }
         });
     });
@@ -102,18 +86,17 @@ if(productionMode){
     });
 }else{
     // Dev https server
-   var privateKey = fs.readFileSync(__dirname + '/server.key', 'utf8');
+    /*var privateKey = fs.readFileSync(__dirname + '/server.key', 'utf8');
     var certificate = fs.readFileSync(__dirname + '/server.crt', 'utf8');
     var credential = { key: privateKey, cert: certificate };
 
     https.createServer(credential, app).listen(3000, function(){
         console.log('Https App started on ', 3000);
-    });
-
-    /*app.listen( 3000, function () {
-        console.log('Listening on port ' + 3000);
     });*/
-}
 
+    app.listen( 3000, function () {
+        console.log('Listening on port ' + 3000);
+    });
+}
 
 module.exports = app;

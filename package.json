@@ -7,7 +7,7 @@
   "description": "Chat component for the tournament app",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "jshint index.js && mocha",
     "start": "node index.js"
   },
   "author": "Bryson Kruk",
@@ -30,5 +30,8 @@
     "ejs": "2.5.6",
     "express": "^4.15.2",
     "pg": "6.1.5"
+  },
+  "jshintConfig":{
+    "esversion": 6
   }
 }

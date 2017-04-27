@@ -1,0 +1,1 @@
+INSERT INTO messages (name, message, pid) VALUES ('Bryson','I plan on winning the next tournament', 0),('Ryan','Not if I have anything to say about it', 1),('Matt', 'You two can compete for second, how about that.', 2),('Clay','I like burritos', 3);
