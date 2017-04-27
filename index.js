@@ -27,7 +27,7 @@ app.get('/chat-wall-api', function (req, res) {
             console.error(err)
             res.send("DB CONNECTION Error " + err); 
         }
-        client.query('SELECT * FROM test_table', function(err, result) {
+        client.query('SELECT * FROM messages', function(err, result) {
             done();
             if (err) { console.error(err); res.send("DB CB Error " + err); 
             }else{ 
@@ -47,13 +47,13 @@ app.post('/chat-wall-api', function(req, res){
             throw err;
         }
         if(req.query.name && req.query.message){
-            client.query(`INSERT INTO test_table(name, message) VALUES ('${req.query.name}', '${req.query.message}')`, function(err, result) {
+            client.query(`INSERT INTO messages(name, message) VALUES ('${req.query.name}', '${req.query.message}')`, function(err, result) {
                 done();
                 if(err){
                     res.json({ 'postSuccess' : false });
                     throw err;
                 }
-                client.query('SELECT * FROM test_table', function(err, result) {
+                client.query('SELECT * FROM messages', function(err, result) {
                     done();
                     if (err) { res.json({ 'postSuccess' : false }); throw err;
                     }else{ 
@@ -76,11 +76,11 @@ app.delete('/chat-wall-api/:id', function(req, res){
             res.json({ 'deleteSuccess' : false });
             throw err; 
         }
-        client.query(`DELETE FROM test_table WHERE '${req.params.id}' = test_table.id `, function(err, result) {
+        client.query(`DELETE FROM messages WHERE '${req.params.id}' = messages.id `, function(err, result) {
             done();
             if (err) { res.json({ 'deleteSuccess' : false }); throw err; 
             }else{ 
-                client.query('SELECT * FROM test_table', function(err, result) {
+                client.query('SELECT * FROM messages', function(err, result) {
                     done();
                     if (err) { console.error(err); res.send("DB CB Error " + err); 
                     }else{ 
