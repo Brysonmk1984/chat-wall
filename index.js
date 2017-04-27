@@ -1,5 +1,3 @@
-//const fs = require("fs");
-//const https = require('https');
 const express = require('express');
 const app = express();
 const cors = require("cors");
@@ -7,8 +5,7 @@ const bodyParser = require("body-parser");
 const pg = require('pg');
 pg.defaults.ssl = true;
 
-
-const productionMode = false;
+const productionMode = true;
 const dbUrl = productionMode ? process.env.DATABASE_URL : "postgres:///localchatwall";
 
 app.use(bodyParser.json());
@@ -77,26 +74,9 @@ app.delete('/chat-wall-api/:id', function(req, res){
     });
 });
 
-
-// SERVER TYPE
-if(productionMode){
-    // Production http server
-    app.listen( process.env.PORT, function () {
-        console.log('Listening on port ' + process.env.PORT);
-    });
-}else{
-    // Dev https server
-    /*var privateKey = fs.readFileSync(__dirname + '/server.key', 'utf8');
-    var certificate = fs.readFileSync(__dirname + '/server.crt', 'utf8');
-    var credential = { key: privateKey, cert: certificate };
-
-    https.createServer(credential, app).listen(3000, function(){
-        console.log('Https App started on ', 3000);
-    });*/
-
-    app.listen( 3000, function () {
-        console.log('Listening on port ' + 3000);
-    });
-}
+// http server
+app.listen( process.env.PORT || 3000, function () {
+    console.log('Listening on port ' + (process.env.PORT || 3000));
+});
 
 module.exports = app;
